@@ -36,7 +36,9 @@ export const AccountProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    void refreshBalance();
+    (async () => {
+      await refreshBalance();
+    })();
   }, []);
 
   return (

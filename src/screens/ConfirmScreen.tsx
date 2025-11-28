@@ -17,7 +17,7 @@ import { useAccount } from '../context/AccountContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Confirm'>;
 
-const FALLBACK_PIN = '1234'; // only for demo; explain in README
+const FALLBACK_PIN = '1234';
 
 export const ConfirmScreen: React.FC<Props> = ({ route, navigation }) => {
   const { payload } = route.params;
@@ -29,20 +29,24 @@ export const ConfirmScreen: React.FC<Props> = ({ route, navigation }) => {
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState<string | null>(null);
 
-  const doTransfer = async () => {
+  const performTransfer = async () => {
     try {
       setLoading(true);
       const result = await processTransfer(payload);
       addToHistory(result);
       await refreshBalance();
-      navigation.replace('Success', { result });
-    } catch (err: any) {
-      if (err.code === 'INSUFFICIENT_FUNDS') {
+
+      navigation.reset({
+        index: 1,
+        routes: [{ name: 'Transfer' }, { name: 'Success', params: { result } }],
+      });
+    } catch (error: any) {
+      if (error.code === 'INSUFFICIENT_FUNDS') {
         Alert.alert(
           'Insufficient funds',
           'Your balance is not enough for this transfer.',
         );
-      } else if (err.message === 'NETWORK_ERROR') {
+      } else if (error.message === 'NETWORK_ERROR') {
         Alert.alert(
           'Network error',
           'Please check your connection and try again.',
@@ -59,7 +63,7 @@ export const ConfirmScreen: React.FC<Props> = ({ route, navigation }) => {
     if (available) {
       const success = await authenticate();
       if (success) {
-        await doTransfer();
+        await performTransfer();
       } else {
         Alert.alert(
           'Authentication failed',
@@ -67,7 +71,7 @@ export const ConfirmScreen: React.FC<Props> = ({ route, navigation }) => {
         );
       }
     } else {
-      // Fallback: simple PIN modal (demo-only)
+      // Fallback: PIN modal
       setShowFallbackModal(true);
     }
   };
@@ -80,7 +84,7 @@ export const ConfirmScreen: React.FC<Props> = ({ route, navigation }) => {
     setShowFallbackModal(false);
     setPin('');
     setPinError(null);
-    await doTransfer();
+    await performTransfer();
   };
 
   return (

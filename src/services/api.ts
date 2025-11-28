@@ -1,6 +1,6 @@
 import { TransferPayload, TransferResult } from '../types';
 
-let CURRENT_BALANCE = 1250.5;
+let CURRENT_BALANCE = 20000;
 
 export async function fetchCurrentBalance(): Promise<number> {
   // Simulate network delay
@@ -13,12 +13,13 @@ export async function processTransfer(
 ): Promise<TransferResult> {
   await sleep(800);
 
-  // Simulate network error
-  if (Math.random() < 0.1) {
-    throw new Error('NETWORK_ERROR');
+  // Deterministic test scenarios
+  if (payload.amount === 9999) {
+    const err: any = new Error('NETWORK_ERROR');
+    err.code = 'NETWORK_ERROR';
+    throw err;
   }
 
-  // Insufficient funds
   if (payload.amount > CURRENT_BALANCE) {
     const error: any = new Error('INSUFFICIENT_FUNDS');
     error.code = 'INSUFFICIENT_FUNDS';

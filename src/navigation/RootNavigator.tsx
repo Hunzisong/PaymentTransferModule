@@ -30,7 +30,11 @@ export const RootNavigator: React.FC = () => (
       <Stack.Screen
         name="Success"
         component={SuccessScreen}
-        options={{ title: 'Success' }}
+        options={{
+          title: 'Success',
+          headerBackVisible: false,
+          gestureEnabled: false,
+        }}
       />
     </Stack.Navigator>
   </NavigationContainer>
