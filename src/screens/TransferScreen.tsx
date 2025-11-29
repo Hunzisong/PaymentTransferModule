@@ -34,8 +34,13 @@ export const TransferScreen: React.FC<Props> = ({ navigation }) => {
   const [showContacts, setShowContacts] = useState(false);
 
   const handleContinue = () => {
+    if (!balance && balance !== 0) {
+      Alert.alert('Balance not loaded', 'Please wait and try again.');
+      return;
+    }
+
     const rError = validateRecipientName(recipientName);
-    const aError = validateAmount(amount);
+    const aError = validateAmount(amount, balance);
 
     setRecipientError(rError);
     setAmountError(aError);
@@ -44,17 +49,7 @@ export const TransferScreen: React.FC<Props> = ({ navigation }) => {
       return;
     }
 
-    if (!balance && balance !== 0) {
-      Alert.alert('Balance not loaded', 'Please wait and try again.');
-      return;
-    }
-
     const numericAmount = Number(amount.replace(',', '.'));
-
-    if (balance != null && numericAmount > balance) {
-      setAmountError('Amount exceeds available balance');
-      return;
-    }
 
     const recipient: Recipient = {
       id: `rec_${recipientName.trim()}`,

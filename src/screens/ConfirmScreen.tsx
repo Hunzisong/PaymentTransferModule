@@ -17,7 +17,7 @@ import { useAccount } from '../context/AccountContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Confirm'>;
 
-const FALLBACK_PIN = '1234';
+const FALLBACK_PIN = '1234'; // demo-only
 
 export const ConfirmScreen: React.FC<Props> = ({ route, navigation }) => {
   const { payload } = route.params;

@@ -1,8 +1,11 @@
-export function validateAmount(raw: string): string | null {
+export function validateAmount(raw: string, balance: number): string | null {
   const amount = Number(raw.replace(',', '.'));
   if (!raw) return 'Amount is required';
   if (Number.isNaN(amount) || amount <= 0)
     return 'Enter a valid positive amount';
+  if (balance != null && amount > balance) {
+    return 'Amount exceeds available balance';
+  }
   return null;
 }
 
