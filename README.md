@@ -494,3 +494,6 @@ This separation keeps the “banking” logic out of the view layer so it is eas
 
 - **Device differences**: not all simulators/devices support biometrics in the same way. The hook had to handle “no biometric hardware” cleanly instead of assuming Face ID / Touch ID was present.
 - **Permissions for contacts**: iOS and Android required different steps (Info.plist usage description vs Android manifest permissions). Until these were configured correctly, contact fetching either silently returned nothing or failed.
+
+## Demo video showcasing the module
+https://github.com/user-attachments/assets/63527f69-15ce-49d9-84c4-e9b75f72130e
